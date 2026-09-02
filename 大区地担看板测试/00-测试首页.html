@@ -87,20 +87,5 @@ tr:hover td{background:#f7faff}
   </div>
   <div class="footer">数据口径与固定任务一致：结算 21,437 / 检测 3,372 / X3 8,231（17-31）。</div>
 </div>
-
-<script>
-(function () {
-  var root = "https://yuliwei1029-tech.github.io/pm-store-dashboard-live/";
-  var current = null;
-  function check() {
-    fetch(root + 'version.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (v) {
-      if (current === null) { current = v.version; return; }
-      if (v.version !== current) { location.reload(); }
-    }).catch(function () {});
-  }
-  check();
-  setInterval(check, 30000);
-})();
-</script>
 </body>
 </html>
