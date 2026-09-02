@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>20k以上PM门店数据看板 · 2026-08-17 ~ 08-30</title>
+<style>
+:root{
+  --bg:#f3f5f8; --panel:#ffffff; --line:#dde3ec; --text:#16233b; --muted:#66738c;
+  --blue:#2563eb; --blue-soft:#e8f0ff; --teal:#0e8a78; --teal-soft:#e0f5f1;
+  --amber:#c07a1b; --amber-soft:#fdf2df; --ink:#0f1c33;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC","Segoe UI",sans-serif;letter-spacing:0;line-height:1.5}
+.topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.topbar .inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:16px;color:var(--ink);display:flex;align-items:center;gap:10px}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#2563eb,#0e8a78);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+.topbar .meta{color:var(--muted);font-size:12.5px;text-align:right}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+.hero{padding:24px 0 6px}
+.hero h1{font-size:24px;line-height:1.3;margin:0 0 6px;color:var(--ink)}
+.hero p{margin:0;color:var(--muted);font-size:13.5px;max-width:980px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px;color:#455066}
+.chip b{color:var(--ink);font-weight:600}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+.kpi .label{font-size:12.5px;color:var(--muted)}
+.kpi .value{font-size:26px;font-weight:700;color:var(--ink);margin-top:5px;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi .note{font-size:12px;color:var(--muted);margin-top:6px}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 6px}
+.store-select{position:relative}
+.store-select select{height:36px;border:1px solid var(--line);border-radius:8px;padding:0 30px 0 12px;font-size:13.5px;background:#fff;color:var(--text);outline:none;min-width:220px;appearance:none;cursor:pointer;font-family:inherit}
+.store-select:after{content:"▾";position:absolute;right:11px;top:7px;color:#8a94a6;pointer-events:none;font-size:13px}
+.nav-btn{height:36px;min-width:36px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;font-size:15px;color:#3b4a63;font-family:inherit}
+.nav-btn:hover{border-color:#b9c6da;background:#f7f9fc}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px;margin:14px 0}
+.panel h2{font-size:17px;margin:0 0 4px;color:var(--ink)}
+.panel .sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.chart-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
+.chart-card h3{font-size:15px;margin:0 0 2px;color:var(--ink)}
+.chart-card .hint{font-size:12px;color:var(--muted);margin-bottom:10px}
+.chart-card.wide{grid-column:1 / -1}
+.chart-svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#455066;margin:6px 0 2px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.table-wrap{overflow:auto;max-height:640px;border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;min-width:900px;font-size:13px}
+th{position:sticky;top:0;background:#f8fafc;z-index:2;text-align:right;padding:9px 12px;border-bottom:1px solid var(--line);color:#5b6678;font-weight:600;white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid #edf1f5;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th:first-child,td:first-child{text-align:center}
+.t-name{text-align:left;font-weight:600;color:var(--ink);cursor:pointer;display:block}
+.t-name small{display:block;font-weight:400;color:var(--muted);font-size:11px;margin-top:1px}
+.t-name:hover{color:var(--blue)}
+tr:hover td{background:#f7faff}
+.rate-hi{color:#0e8a78;font-weight:600}
+.rate-mid{color:#c07a1b;font-weight:600}
+.rate-lo{color:#b3261e;font-weight:600}
+.footer{color:var(--muted);font-size:12px;padding:18px 0 30px}
+@media (max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .charts{grid-template-columns:1fr}
+  .chart-card.wide{grid-column:auto}
+  .topbar .meta{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="inner">
+    <div class="brand"><span class="logo">PM</span><span>20k以上PM门店数据看板</span></div>
+    <div class="meta">数据区间：2026-08-17 ~ 2026-08-30 · 结算时间口径 · 同车架号每日去重</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <h1>20k以上PM 门店检测完成率看板</h1>
+    <p>按结算时间统计每日 20,000 公里以上保养/定检入厂工单：结算台次为当日结算的车架号去重总数，检测台次为当日已检测车辆数，检测完成率 = 检测台次 ÷ 结算台次。</p>
+    <div class="chips">
+      <span class="chip">门店数 <b>57</b></span>
+      <span class="chip">累计结算台次 <b>19,679</b></span>
+      <span class="chip">累计检测台次 <b>3,162</b></span>
+      <span class="chip">整体完成率 <b id="allRate">16.1%</b></span>
+      <span class="chip">口径 <b>工单里程 &gt; 20,000</b></span>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">当前门店 · 结算台次</div><div class="value" id="kSettled">0</div><div class="note">8/17-8/30 车架号去重合计</div></div>
+    <div class="kpi"><div class="label">当前门店 · 检测台次</div><div class="value" id="kDetected">0</div><div class="note">8/17-8/30 已检测车辆数</div></div>
+    <div class="kpi"><div class="label">当前门店 · 检测完成率</div><div class="value" id="kRate">—</div><div class="note">检测台次 ÷ 结算台次</div></div>
+    <div class="kpi"><div class="label">当前门店</div><div class="value" id="storeName" style="font-size:19px">全部门店</div><div class="note" id="storeCode">全部门店汇总</div></div>
+  </div>
+
+  <div class="controls">
+    <div class="store-select"><select id="storeSelect"></select></div>
+    <button class="nav-btn" id="prevStore" title="上一个门店">‹</button>
+    <button class="nav-btn" id="nextStore" title="下一个门店">›</button>
+  </div>
+
+  <div id="chartsArea">
+    <div class="charts">
+      <div class="chart-card">
+        <h3>20k以上PM 入厂工单结算台次</h3>
+        <div class="hint">按结算时间统计每天车架号去重总数</div>
+        <div class="legend"><span><i style="background:#2563eb"></i>结算台次</span></div>
+        <div id="chartSettled"></div>
+      </div>
+      <div class="chart-card">
+        <h3>20k以上PM 检测台次</h3>
+        <div class="hint">按结算时间统计每天已检测车辆数</div>
+        <div class="legend"><span><i style="background:#0e8a78"></i>检测台次</span></div>
+        <div id="chartDetected"></div>
+      </div>
+      <div class="chart-card wide">
+        <h3>20k以上PM 检测完成率</h3>
+        <div class="hint">检测台次 ÷ 结算台次，按天展示</div>
+        <div class="legend"><span><i style="background:#c07a1b;border-radius:50%"></i>完成率</span></div>
+        <div id="chartRate"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>各店汇总（按结算台次降序）</h2>
+    <div class="sub">点击门店名称可直接切换看板；完成率低于 70% 标红、70%-90% 标黄、90% 以上标绿</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="text-align:left">门店</th><th>结算台次</th><th>检测台次</th><th>完成率</th><th>每日完成率</th></tr></thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="footer">数据来源：0817-0830.xlsx 厂家数据；口径：维修类型分组 = PM，工单里程 &gt; 20,000，同一车架号同一天只计一次。</div>
+</div>
+<script>
+const DATA = {"北京方庄":{"code":"10113","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[22,27,55,36,31,17,0,40,31,30,43,23,22,0],"detected":[0,0,1,2,3,0,0,3,1,0,0,1,0,0],"rate":[0.0,0.0,1.8,5.6,9.7,0.0,null,7.5,3.2,0.0,0.0,4.3,0.0,null],"total_settled":377,"total_detected":11,"total_rate":2.9},"天津华苑鑫盛":{"code":"10215","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[44,52,29,22,54,56,39,51,41,31,36,44,35,46],"detected":[12,12,9,8,6,4,2,10,13,14,6,12,1,0],"rate":[27.3,23.1,31.0,36.4,11.1,7.1,5.1,19.6,31.7,45.2,16.7,27.3,2.9,0.0],"total_settled":580,"total_detected":109,"total_rate":18.8},"唐山冀东":{"code":"10311","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[23,46,39,82,23,36,53,37,18,31,42,30,36,39],"detected":[2,0,2,3,0,0,0,0,0,0,0,0,0,0],"rate":[8.7,0.0,5.1,3.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"total_settled":535,"total_detected":7,"total_rate":1.3},"邢台威龙":{"code":"10371","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[23,26,37,7,20,21,26,26,28,2,10,13,16,21],"detected":[0,0,0,2,3,4,7,4,4,0,0,2,5,13],"rate":[0.0,0.0,0.0,28.6,15.0,19.0,26.9,15.4,14.3,0.0,0.0,15.4,31.2,61.9],"total_settled":276,"total_detected":44,"total_rate":15.9},"包头信得惠":{"code":"10421","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[7,15,8,7,0,9,8,4,5,4,7,7,11,8],"detected":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rate":[0.0,0.0,0.0,0.0,null,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"total_settled":100,"total_detected":0,"total_rate":0.0},"太原大昌":{"code":"12911","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[26,48,14,25,36,41,42,29,32,23,42,39,58,29],"detected":[1,3,9,6,10,16,16,4,4,13,1,3,2,1],"rate":[3.8,6.2,64.3,24.0,27.8,39.0,38.1,13.8,12.5,56.5,2.4,7.7,3.4,3.4],"total_settled":484,"total_detected":89,"total_rate":18.4},"沈阳于洪":{"code":"20512","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[28,20,21,21,17,33,32,11,20,13,16,19,37,21],"detected":[0,0,2,3,1,1,0,0,2,0,0,0,0,1],"rate":[0.0,0.0,9.5,14.3,5.9,3.0,0.0,0.0,10.0,0.0,0.0,0.0,0.0,4.8],"total_settled":309,"total_detected":10,"total_rate":3.2},"沈阳铁西华通":{"code":"20514","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[42,36,44,38,40,67,60,24,41,44,33,37,52,46],"detected":[0,0,0,0,0,5,17,15,23,22,22,15,20,22],"rate":[0.0,0.0,0.0,0.0,0.0,7.5,28.3,62.5,56.1,50.0,66.7,40.5,38.5,47.8],"total_settled":604,"total_detected":161,"total_rate":26.7},"长春东环":{"code":"20611","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[40,37,19,39,37,38,57,28,26,40,28,36,29,38],"detected":[0,5,2,0,1,0,0,0,0,0,1,0,0,0],"rate":[0.0,13.5,10.5,0.0,2.7,0.0,0.0,0.0,0.0,0.0,3.6,0.0,0.0,0.0],"total_settled":491,"total_detected":9,"total_rate":1.8},"长春华阳":{"code":"20612","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[31,26,27,29,28,28,43,23,35,20,25,22,39,42],"detected":[0,2,5,0,2,6,0,0,0,0,0,0,0,0],"rate":[0.0,7.7,18.5,0.0,7.1,21.4,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"total_settled":417,"total_detected":15,"total_rate":3.6},"哈尔滨华通":{"code":"20711","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[43,31,53,36,31,29,30,40,33,22,37,14,37,41],"detected":[0,0,0,0,0,2,0,0,1,5,2,0,0,0],"rate":[0.0,0.0,0.0,0.0,0.0,6.9,0.0,0.0,3.0,22.7,5.4,0.0,0.0,0.0],"total_settled":471,"total_detected":10,"total_rate":2.1},"哈尔滨龙晟":{"code":"20712","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[20,61,38,61,55,54,32,58,46,32,33,66,57,54],"detected":[0,0,0,0,0,0,1,2,0,0,0,1,5,5],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,3.1,3.4,0.0,0.0,0.0,1.5,8.8,9.3],"total_settled":589,"total_detected":14,"total_rate":2.4},"上海万兴":{"code":"3081","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[12,9,13,12,17,22,13,13,9,9,18,8,17,13],"detected":[2,3,1,2,7,2,3,3,0,4,1,2,1,0],"rate":[16.7,33.3,7.7,16.7,41.2,9.1,23.1,23.1,0.0,44.4,5.6,25.0,5.9,0.0],"total_settled":185,"total_detected":31,"total_rate":16.8},"常州外汽":{"code":"30951","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[16,13,13,20,26,19,47,46,17,33,32,15,17,52],"detected":[6,8,8,12,10,13,35,9,11,23,10,12,12,24],"rate":[37.5,61.5,61.5,60.0,38.5,68.4,74.5,19.6,64.7,69.7,31.2,80.0,70.6,46.2],"total_settled":365,"total_detected":193,"total_rate":52.9},"常州世纪行":{"code":"30953","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[10,22,26,11,19,24,35,11,33,23,33,22,24,14],"detected":[0,0,0,0,0,0,0,0,1,1,3,1,2,5],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,4.3,9.1,4.5,8.3,35.7],"total_settled":304,"total_detected":13,"total_rate":4.3},"苏州由由":{"code":"30963","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[42,38,45,41,41,81,70,49,47,41,48,53,64,47],"detected":[10,16,21,21,8,30,17,15,11,11,10,13,25,16],"rate":[23.8,42.1,46.7,51.2,19.5,37.0,24.3,30.6,23.4,26.8,20.8,24.5,39.1,34.0],"total_settled":707,"total_detected":224,"total_rate":31.7},"苏州中园":{"code":"30965","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[38,17,23,21,30,51,47,37,25,27,31,34,37,31],"detected":[0,0,0,4,0,0,0,0,0,0,0,3,13,10],"rate":[0.0,0.0,0.0,19.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,8.8,35.1,32.3],"total_settled":449,"total_detected":30,"total_rate":6.7},"南通长江":{"code":"30982","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[20,15,10,12,12,23,23,10,13,8,6,12,27,23],"detected":[1,8,4,7,4,3,0,2,0,1,0,1,0,0],"rate":[5.0,53.3,40.0,58.3,33.3,13.0,0.0,20.0,0.0,12.5,0.0,8.3,0.0,0.0],"total_settled":214,"total_detected":31,"total_rate":14.5},"宜兴新苏南":{"code":"3091","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[18,23,23,13,23,20,27,12,27,18,22,17,28,27],"detected":[2,5,16,6,11,3,1,1,1,4,2,3,4,0],"rate":[11.1,21.7,69.6,46.2,47.8,15.0,3.7,8.3,3.7,22.2,9.1,17.6,14.3,0.0],"total_settled":298,"total_detected":59,"total_rate":19.8},"徐州常缘":{"code":"3092","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[26,26,52,33,37,32,53,40,33,33,30,27,41,50],"detected":[16,3,15,13,18,22,24,25,14,14,17,14,27,24],"rate":[61.5,11.5,28.8,39.4,48.6,68.8,45.3,62.5,42.4,42.4,56.7,51.9,65.9,48.0],"total_settled":513,"total_detected":246,"total_rate":48.0},"宿迁天宁":{"code":"3091","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[30,14,9,17,17,47,21,13,22,51,9,15,58,28],"detected":[15,9,6,9,12,19,13,9,9,8,6,8,12,9],"rate":[50.0,64.3,66.7,52.9,70.6,40.4,61.9,69.2,40.9,15.7,66.7,53.3,20.7,32.1],"total_settled":351,"total_detected":144,"total_rate":41.0},"宁波宁兴":{"code":"31013","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[29,39,38,48,29,35,34,55,32,20,39,13,29,61],"detected":[0,0,0,0,6,2,0,6,3,5,2,2,0,0],"rate":[0.0,0.0,0.0,0.0,20.7,5.7,0.0,10.9,9.4,25.0,5.1,15.4,0.0,0.0],"total_settled":501,"total_detected":26,"total_rate":5.2},"杭州康桥":{"code":"31025","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[19,14,16,19,14,24,23,22,24,69,27,15,37,23],"detected":[11,9,11,6,6,11,12,5,6,5,5,7,13,8],"rate":[57.9,64.3,68.8,31.6,42.9,45.8,52.2,22.7,25.0,7.2,18.5,46.7,35.1,34.8],"total_settled":346,"total_detected":115,"total_rate":33.2},"桐乡常隆":{"code":"31043","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[9,5,24,13,13,21,10,16,17,12,11,9,14,21],"detected":[5,1,13,13,4,13,5,2,10,9,9,8,11,16],"rate":[55.6,20.0,54.2,100.0,30.8,61.9,50.0,12.5,58.8,75.0,81.8,88.9,78.6,76.2],"total_settled":194,"total_detected":118,"total_rate":60.8},"丽水金丰":{"code":"3101","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[27,10,7,25,33,10,13,24,16,10,17,8,12,19],"detected":[0,0,0,2,0,2,5,13,9,7,10,4,6,10],"rate":[0.0,0.0,0.0,8.0,0.0,20.0,38.5,54.2,56.2,70.0,58.8,50.0,50.0,52.6],"total_settled":231,"total_detected":68,"total_rate":29.4},"海宁佳禾":{"code":"3101","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[8,28,17,18,12,23,25,17,9,6,7,32,6,37],"detected":[1,4,3,0,2,0,0,1,0,0,0,0,1,2],"rate":[12.5,14.3,17.6,0.0,16.7,0.0,0.0,5.9,0.0,0.0,0.0,0.0,16.7,5.4],"total_settled":245,"total_detected":14,"total_rate":5.7},"安庆环丰":{"code":"31151","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[0,11,12,5,8,2,33,16,5,8,4,9,7,0],"detected":[0,0,0,0,0,0,4,2,0,1,1,2,2,0],"rate":[null,0.0,0.0,0.0,0.0,0.0,12.1,12.5,0.0,12.5,25.0,22.2,28.6,null],"total_settled":120,"total_detected":12,"total_rate":10.0},"漳州盛兴":{"code":"31252","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[31,15,12,12,33,37,12,15,19,23,16,16,28,25],"detected":[3,0,0,0,0,0,1,1,2,1,1,0,2,0],"rate":[9.7,0.0,0.0,0.0,0.0,0.0,8.3,6.7,10.5,4.3,6.2,0.0,7.1,0.0],"total_settled":294,"total_detected":11,"total_rate":3.7},"上饶宝泓":{"code":"31342","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[5,6,1,3,5,4,4,3,5,5,1,2,9,7],"detected":[0,0,0,0,0,0,0,0,0,5,1,1,7,4],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,100.0,100.0,50.0,77.8,57.1],"total_settled":60,"total_detected":18,"total_rate":30.0},"安利捷（青岛）":{"code":"31412","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[27,27,24,29,21,22,24,29,20,14,49,27,24,26],"detected":[20,14,14,17,10,14,12,13,4,8,11,12,20,20],"rate":[74.1,51.9,58.3,58.6,47.6,63.6,50.0,44.8,20.0,57.1,22.4,44.4,83.3,76.9],"total_settled":363,"total_detected":189,"total_rate":52.1},"烟台东联":{"code":"31441","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[19,3,32,22,31,20,19,19,27,31,23,2,38,33],"detected":[4,1,5,7,3,4,4,3,2,2,2,0,7,4],"rate":[21.1,33.3,15.6,31.8,9.7,20.0,21.1,15.8,7.4,6.5,8.7,0.0,18.4,12.1],"total_settled":319,"total_detected":48,"total_rate":15.0},"临沂泰华":{"code":"31491","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[39,39,33,26,24,23,64,41,32,26,32,37,51,53],"detected":[0,0,0,12,6,6,24,14,12,12,9,15,14,15],"rate":[0.0,0.0,0.0,46.2,25.0,26.1,37.5,34.1,37.5,46.2,28.1,40.5,27.5,28.3],"total_settled":519,"total_detected":139,"total_rate":26.8},"郑州世纪鸿图":{"code":"41514","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[2,20,8,22,13,27,12,23,5,14,3,16,15,7],"detected":[1,4,0,3,1,2,0,4,0,0,0,0,0,0],"rate":[50.0,20.0,0.0,13.6,7.7,7.4,0.0,17.4,0.0,0.0,0.0,0.0,0.0,0.0],"total_settled":187,"total_detected":15,"total_rate":8.0},"许昌豫中":{"code":"41551","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[12,16,0,13,5,0,9,21,16,24,0,32,23,0],"detected":[0,0,0,0,0,0,0,0,5,6,0,3,7,0],"rate":[0.0,0.0,null,0.0,0.0,null,0.0,0.0,31.2,25.0,null,9.4,30.4,null],"total_settled":171,"total_detected":21,"total_rate":12.3},"武汉中南":{"code":"41613","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[49,5,29,120,63,42,46,31,26,5,58,82,41,34],"detected":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"total_settled":628,"total_detected":0,"total_rate":0.0},"宜昌德龙":{"code":"41621","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[0,3,9,13,3,7,10,23,6,7,4,3,11,8],"detected":[0,0,0,1,0,2,0,0,0,0,2,0,2,3],"rate":[null,0.0,0.0,7.7,0.0,28.6,0.0,0.0,0.0,0.0,50.0,0.0,18.2,37.5],"total_settled":106,"total_detected":10,"total_rate":9.4},"岳阳彤达":{"code":"41721","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[36,31,29,30,18,29,22,13,24,12,25,52,31,37],"detected":[1,0,0,0,0,1,2,2,0,1,0,1,10,7],"rate":[2.8,0.0,0.0,0.0,0.0,3.4,9.1,15.4,0.0,8.3,0.0,1.9,32.3,18.9],"total_settled":389,"total_detected":25,"total_rate":6.4},"常德华运通":{"code":"41751","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[14,14,15,23,27,23,16,13,22,6,0,41,18,11],"detected":[9,6,4,7,5,10,11,5,11,0,0,9,12,3],"rate":[64.3,42.9,26.7,30.4,18.5,43.5,68.8,38.5,50.0,0.0,null,22.0,66.7,27.3],"total_settled":243,"total_detected":92,"total_rate":37.9},"广州广博":{"code":"4182","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[31,40,44,26,26,24,31,31,34,25,32,24,36,19],"detected":[6,2,1,8,12,7,17,16,15,8,21,17,16,8],"rate":[19.4,5.0,2.3,30.8,46.2,29.2,54.8,51.6,44.1,32.0,65.6,70.8,44.4,42.1],"total_settled":419,"total_detected":154,"total_rate":36.8},"广州永佳":{"code":"4182","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[26,28,25,27,20,42,39,28,16,16,18,23,30,29],"detected":[0,0,0,9,1,0,0,0,0,1,1,1,2,2],"rate":[0.0,0.0,0.0,33.3,5.0,0.0,0.0,0.0,0.0,6.2,5.6,4.3,6.7,6.9],"total_settled":366,"total_detected":17,"total_rate":4.6},"江门永佳":{"code":"41843","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[22,23,37,4,23,24,0,37,31,18,8,8,7,0],"detected":[0,0,0,0,0,0,0,0,0,0,0,0,1,0],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,null,0.0,0.0,0.0,0.0,0.0,14.3,null],"total_settled":241,"total_detected":1,"total_rate":0.4},"佛山骏安":{"code":"41852","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[43,14,43,26,15,46,50,49,32,17,20,32,35,34],"detected":[0,0,0,0,0,0,0,0,0,0,1,1,4,3],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.0,3.1,11.4,8.8],"total_settled":452,"total_detected":9,"total_rate":2.0},"东莞永佳":{"code":"41891","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[6,15,3,37,6,32,15,31,6,25,20,15,13,27],"detected":[0,0,0,0,0,0,1,0,0,0,0,0,2,0],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,6.7,0.0,0.0,0.0,0.0,0.0,15.4,0.0],"total_settled":251,"total_detected":3,"total_rate":1.2},"惠州骏爵":{"code":"4183","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[14,20,33,12,25,41,28,22,17,25,6,16,39,28],"detected":[2,2,2,1,0,0,0,0,0,0,0,0,5,0],"rate":[14.3,10.0,6.1,8.3,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,12.8,0.0],"total_settled":324,"total_detected":12,"total_rate":3.7},"韶关利泰":{"code":"4181","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[28,30,14,21,18,11,25,14,15,20,12,11,19,24],"detected":[3,4,3,4,0,3,4,0,0,0,0,0,3,3],"rate":[10.7,13.3,21.4,19.0,0.0,27.3,16.0,0.0,0.0,0.0,0.0,0.0,15.8,12.5],"total_settled":260,"total_detected":27,"total_rate":10.4},"南宁中达":{"code":"41911","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[51,48,38,44,25,28,32,27,73,18,17,55,20,33],"detected":[0,1,0,4,0,0,3,0,1,0,0,0,0,1],"rate":[0.0,2.1,0.0,9.1,0.0,0.0,9.4,0.0,1.4,0.0,0.0,0.0,0.0,3.0],"total_settled":507,"total_detected":10,"total_rate":2.0},"广西玉林骏业":{"code":"41951","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[24,2,27,25,14,21,22,8,10,16,10,13,22,4],"detected":[6,0,2,7,4,5,2,0,5,8,6,5,15,3],"rate":[25.0,0.0,7.4,28.0,28.6,23.8,9.1,0.0,50.0,50.0,60.0,38.5,68.2,75.0],"total_settled":216,"total_detected":68,"total_rate":31.5},"安利捷（成都）":{"code":"52111","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[31,16,7,27,29,29,33,33,31,18,28,39,39,13],"detected":[16,5,6,12,9,22,12,11,6,5,15,10,29,8],"rate":[51.6,31.2,85.7,44.4,31.0,75.9,36.4,33.3,19.4,27.8,53.6,25.6,74.4,61.5],"total_settled":373,"total_detected":166,"total_rate":44.5},"成都锦泰":{"code":"52115","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[15,56,40,47,36,0,101,2,0,0,70,44,39,15],"detected":[2,2,4,3,2,0,7,0,0,0,0,0,5,3],"rate":[13.3,3.6,10.0,6.4,5.6,null,6.9,0.0,null,null,0.0,0.0,12.8,20.0],"total_settled":453,"total_detected":28,"total_rate":6.2},"成都启阳华通":{"code":"52116","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[27,20,23,31,0,8,0,5,35,28,4,34,0,17],"detected":[0,0,0,0,0,5,0,0,2,3,3,0,0,1],"rate":[0.0,0.0,0.0,0.0,null,62.5,null,0.0,5.7,10.7,75.0,0.0,null,5.9],"total_settled":232,"total_detected":14,"total_rate":6.0},"重庆万家":{"code":"52224","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[12,18,11,0,9,17,21,33,31,43,4,18,101,0],"detected":[4,5,4,0,0,5,17,2,4,0,0,0,18,0],"rate":[33.3,27.8,36.4,null,0.0,29.4,81.0,6.1,12.9,0.0,0.0,0.0,17.8,null],"total_settled":309,"total_detected":59,"total_rate":19.1},"重庆百事达礼嘉":{"code":"5222","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[12,12,14,22,8,15,36,12,27,15,28,7,16,17],"detected":[1,0,4,3,3,2,24,3,4,3,6,4,11,13],"rate":[8.3,0.0,28.6,13.6,37.5,13.3,66.7,25.0,14.8,20.0,21.4,57.1,68.8,76.5],"total_settled":238,"total_detected":80,"total_rate":33.6},"西安阳开龙腾":{"code":"62612","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[63,39,24,27,41,23,66,46,7,65,22,26,16,82],"detected":[0,0,0,0,0,0,0,0,0,0,1,1,6,13],"rate":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,4.5,3.8,37.5,15.9],"total_settled":543,"total_detected":21,"total_rate":3.9},"榆林高新":{"code":"62631","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[54,6,36,31,36,29,30,39,5,31,27,26,11,0],"detected":[19,0,10,5,3,10,9,4,1,2,1,2,9,0],"rate":[35.2,0.0,27.8,16.1,8.3,34.5,30.0,10.3,20.0,6.5,3.7,7.7,81.8,null],"total_settled":360,"total_detected":74,"total_rate":20.6},"乌鲁木齐华通":{"code":"62811","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[29,35,32,24,30,33,33,31,38,30,11,50,31,27],"detected":[0,0,0,0,0,7,8,6,5,3,2,4,7,4],"rate":[0.0,0.0,0.0,0.0,0.0,21.2,24.2,19.4,13.2,10.0,18.2,8.0,22.6,14.8],"total_settled":432,"total_detected":46,"total_rate":10.6},"昆明大昌行联亚":{"code":"52413","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[0,0,0,0,7,126,2,6,1,4,1,12,1,8],"detected":[0,0,0,0,0,0,0,0,0,0,0,0,0,2],"rate":[null,null,null,null,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,25.0],"total_settled":167,"total_detected":2,"total_rate":1.2},"西安龙腾":{"code":"62612","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[0,0,0,0,0,0,0,0,0,0,1,0,0,0],"detected":[0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rate":[null,null,null,null,null,null,null,null,null,null,0.0,null,null,null],"total_settled":1,"total_detected":0,"total_rate":0.0},"全部门店":{"code":"","dates":["08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30"],"settled":[1375,1310,1355,1455,1314,1646,1698,1437,1296,1241,1236,1402,1611,1449],"detected":[181,134,187,222,173,263,320,215,202,215,191,200,376,286],"rate":[13.2,10.2,13.8,15.3,13.2,16.0,18.8,15.0,15.6,17.3,15.5,14.3,23.3,19.7],"total_settled":19679,"total_detected":3162,"total_rate":16.1}};
+const DATE_LABELS = ["08-17", "08-18", "08-19", "08-20", "08-21", "08-22", "08-23", "08-24", "08-25", "08-26", "08-27", "08-28", "08-29", "08-30"];
+let currentStore = "全部门店";
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function fmt(v){return v==null?"—":v.toFixed(1)+"%";}
+function maxOf(a){return a.length?Math.max.apply(null,a):0;}
+
+function niceMax(v){
+  if(v<=0)return 1;
+  const p=Math.pow(10,Math.floor(Math.log10(v)));
+  const n=v/p;
+  const step=n<=1?1:n<=2?2:n<=5?5:10;
+  return step*p;
+}
+
+function barChart(el, labels, series, opts){
+  const W=720,H=340,PL=58,PR=18,PT=24,PB=44;
+  const iw=W-PL-PR, ih=H-PT-PB;
+  const ymax=niceMax(Math.max(1,maxOf(series)));
+  const n=labels.length, bw=Math.min(34, iw/n*0.58);
+  const x=d=>PL+iw*(d+0.5)/n;
+  const y=v=>PT+ih*(1-v/ymax);
+  let grid="";
+  for(let i=0;i<=4;i++){
+    const val=ymax*i/4, yy=y(val);
+    grid+='<line x1="'+PL+'" y1="'+yy+'" x2="'+(W-PR)+'" y2="'+yy+'" stroke="#e7ecf3"/>';
+    grid+='<text x="'+(PL-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="#8a94a6">'+Math.round(val)+'</text>';
+  }
+  let bars="";
+  series.forEach((v,i)=>{
+    const xc=x(i), w=bw, yy=y(v);
+    bars+='<rect x="'+(xc-w/2)+'" y="'+(yy+2)+'" width="'+w+'" height="'+(PT+ih-yy-2)+'" rx="2" fill="'+opts.color+'"/>';
+    bars+='<text x="'+xc+'" y="'+(yy-8)+'" text-anchor="middle" font-size="11" font-weight="600" fill="'+opts.textColor+'">'+v+'</text>';
+  });
+  let xl="";
+  labels.forEach((d,i)=>{
+    xl+='<text x="'+x(i)+'" y="'+(H-PB+18)+'" text-anchor="middle" font-size="11" fill="#66738c">'+esc(d)+'</text>';
+  });
+  el.innerHTML='<svg class="chart-svg" viewBox="0 0 '+W+' '+H+'"><line x1="'+PL+'" y1="'+(PT+ih)+'" x2="'+(W-PR)+'" y2="'+(PT+ih)+'" stroke="#c9d3e1"/><line x1="'+PL+'" y1="'+PT+'" x2="'+PL+'" y2="'+(PT+ih)+'" stroke="#c9d3e1"/>'+grid+bars+xl+'</svg>';
+}
+
+function lineChart(el, labels, series, color){
+  const W=720,H=340,PL=58,PR=18,PT=24,PB=44;
+  const iw=W-PL-PR, ih=H-PT-PB;
+  const vals=series.map(v=>v==null?0:v);
+  const ymax=Math.max(10, niceMax(maxOf(vals.map(v=>v*1.15))));
+  const x=d=>PL+iw*(d+0.5)/labels.length;
+  const y=v=>PT+ih*(1-v/ymax);
+  let grid="";
+  for(let i=0;i<=4;i++){
+    const val=ymax*i/4, yy=y(val);
+    grid+='<line x1="'+PL+'" y1="'+yy+'" x2="'+(W-PR)+'" y2="'+yy+'" stroke="#e7ecf3"/>';
+    grid+='<text x="'+(PL-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="#8a94a6">'+Math.round(val)+'%</text>';
+  }
+  let path="", dots="", labelsHtml="";
+  series.forEach((v,i)=>{
+    if(v==null)return;
+    const xc=x(i), yc=y(v);
+    path+=(path?"L":"M")+xc.toFixed(1)+" "+yc.toFixed(1)+" ";
+    dots+='<circle cx="'+xc+'" cy="'+yc+'" r="4" fill="#fff" stroke="'+color+'" stroke-width="2"/>';
+    dots+='<text x="'+xc+'" y="'+(yc-10)+'" text-anchor="middle" font-size="11" font-weight="600" fill="'+color+'">'+v.toFixed(1)+'%</text>';
+  });
+  labels.forEach((d,i)=>{
+    labelsHtml+='<text x="'+x(i)+'" y="'+(H-PB+18)+'" text-anchor="middle" font-size="11" fill="#66738c">'+esc(d)+'</text>';
+  });
+  el.innerHTML='<svg class="chart-svg" viewBox="0 0 '+W+' '+H+'"><line x1="'+PL+'" y1="'+(PT+ih)+'" x2="'+(W-PR)+'" y2="'+(PT+ih)+'" stroke="#c9d3e1"/><line x1="'+PL+'" y1="'+PT+'" x2="'+PL+'" y2="'+(PT+ih)+'" stroke="#c9d3e1"/>'+grid+'<path d="'+path+'" fill="none" stroke="'+color+'" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>'+dots+labelsHtml+'</svg>';
+}
+
+function storeNames(){return Object.keys(DATA);}
+
+function render(){
+  const d=DATA[currentStore];
+  document.getElementById("storeName").textContent=currentStore;
+  document.getElementById("storeCode").textContent=d.code?("门店代码 "+d.code):"全部门店汇总";
+  document.getElementById("kSettled").textContent=d.total_settled.toLocaleString();
+  document.getElementById("kDetected").textContent=d.total_detected.toLocaleString();
+  document.getElementById("kRate").textContent=fmt(d.total_rate);
+  barChart(document.getElementById("chartSettled"), DATE_LABELS, d.settled, {color:"#2563eb", textColor:"#1d4ed8"});
+  barChart(document.getElementById("chartDetected"), DATE_LABELS, d.detected, {color:"#0e8a78", textColor:"#0b7263"});
+  lineChart(document.getElementById("chartRate"), DATE_LABELS, d.rate, "#c07a1b");
+}
+
+function populateSelect(){
+  const sel=document.getElementById("storeSelect");
+  storeNames().forEach(name=>{
+    const o=document.createElement("option");
+    o.value=name;
+    o.textContent=name+(name==="全部门店"?"":"  "+DATA[name].code);
+    sel.appendChild(o);
+  });
+}
+
+function buildTable(){
+  const names=storeNames().filter(n=>n!=="全部门店").sort((a,b)=>DATA[b].total_settled-DATA[a].total_settled);
+  const rows=names.map(n=>{
+    const d=DATA[n];
+    const rateCls=d.total_rate==null?"":d.total_rate>=90?"rate-hi":d.total_rate>=70?"rate-mid":"rate-lo";
+    return '<tr><td><span class="t-name" data-store="'+esc(n)+'">'+esc(n)+'<small>'+esc(d.code)+'</small></span></td>'+
+      '<td>'+d.total_settled.toLocaleString()+'</td><td>'+d.total_detected.toLocaleString()+'</td>'+
+      '<td class="'+rateCls+'">'+fmt(d.total_rate)+'</td><td>'+d.rate.map(v=>v==null?"—":v.toFixed(1)+"%").join(" / ")+'</td></tr>';
+  });
+  document.getElementById("summaryBody").innerHTML=rows.join("");
+  document.getElementById("allRate").textContent=fmt(DATA["全部门店"].total_rate);
+}
+
+function selectStore(name){
+  if(!DATA[name])return;
+  currentStore=name;
+  document.getElementById("storeSelect").value=name;
+  render();
+  document.getElementById("chartsArea").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function stepStore(dirn){
+  const names=storeNames();
+  let idx=names.indexOf(currentStore)+dirn;
+  if(idx<0)idx=names.length-1;
+  if(idx>=names.length)idx=0;
+  selectStore(names[idx]);
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  populateSelect();
+  buildTable();
+  render();
+  document.getElementById("storeSelect").addEventListener("change",e=>selectStore(e.target.value));
+  document.getElementById("prevStore").addEventListener("click",()=>stepStore(-1));
+  document.getElementById("nextStore").addEventListener("click",()=>stepStore(1));
+  document.getElementById("summaryBody").addEventListener("click",e=>{
+    const t=e.target.closest("[data-store]");
+    if(t)selectStore(t.getAttribute("data-store"));
+  });
+});
+</script>
+
+<script>
+(function () {
+  var root = "https://yuliwei1029-tech.github.io/pm-store-dashboard-live/";
+  var current = null;
+  function check() {
+    fetch(root + 'version.json', {cache: 'no-store'}).then(function (r) { return r.json(); }).then(function (v) {
+      if (current === null) { current = v.version; return; }
+      if (v.version !== current) { location.reload(); }
+    }).catch(function () {});
+  }
+  check();
+  setInterval(check, 30000);
+})();
+</script>
+</body>
+</html>
