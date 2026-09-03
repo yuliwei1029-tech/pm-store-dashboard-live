@@ -88,7 +88,7 @@ tr:hover td{background:#f7faff}
   </div>
   <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
     <div class="kpi"><div class="label">累计PM入厂工单结算台次</div><div class="value">455</div><div class="note">8/17至最新日，结算时间+工单号+车架号去重合计</div></div>
-    <div class="kpi"><div class="label">累计PM检测台次</div><div class="value">25</div><div class="note">8/17至最新日，当天结算VIN匹配当天X3接车单</div></div>
+    <div class="kpi"><div class="label">累计PM检测台次</div><div class="value">25</div><div class="note">17-30日厂端“是否检测”；31日起当天结算VIN匹配当天X3接车单</div></div>
     <div class="kpi"><div class="label">累计PM检测完成率</div><div class="value">5.5%</div><div class="note">检测台次 ÷ 结算台次</div></div>
     <div class="kpi"><div class="label">累计检测台次(8/1起)</div><div class="value">36</div><div class="note">累计X3检测台次（不限里程），含8月1日所有入厂检测</div></div>
   </div>
@@ -108,13 +108,13 @@ tr:hover td{background:#f7faff}
     <div class="table-wrap">
       <table>
         <thead><tr><th>日期</th><th>PM入厂工单结算台次</th><th>PM检测台次</th><th>PM检测完成率</th></tr></thead>
-        <tbody><tr><td>08-17</td><td>32</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-18</td><td>27</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-19</td><td>25</td><td>2</td><td class="rate-lo">8.0%</td></tr><tr><td>08-20</td><td>27</td><td>2</td><td class="rate-lo">7.4%</td></tr><tr><td>08-21</td><td>20</td><td>1</td><td class="rate-lo">5.0%</td></tr><tr><td>08-22</td><td>38</td><td>1</td><td class="rate-lo">2.6%</td></tr><tr><td>08-23</td><td>38</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-24</td><td>14</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-25</td><td>26</td><td>3</td><td class="rate-lo">11.5%</td></tr><tr><td>08-26</td><td>15</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-27</td><td>18</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-28</td><td>23</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-29</td><td>45</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-30</td><td>27</td><td>1</td><td class="rate-lo">3.7%</td></tr><tr><td>08-31</td><td>24</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>09-01</td><td>27</td><td>3</td><td class="rate-lo">11.1%</td></tr><tr><td>09-02</td><td>29</td><td>12</td><td class="rate-lo">41.4%</td></tr><tr><td>合计</td><td>455</td><td>25</td><td class="rate-lo">5.5%</td></tr></tbody>
+        <tbody><tr><td>08-17</td><td>32</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-18</td><td>27</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-19</td><td>25</td><td>2</td><td class="rate-lo">8.0%</td></tr><tr><td>08-20</td><td>27</td><td>3</td><td class="rate-lo">11.1%</td></tr><tr><td>08-21</td><td>20</td><td>1</td><td class="rate-lo">5.0%</td></tr><tr><td>08-22</td><td>38</td><td>1</td><td class="rate-lo">2.6%</td></tr><tr><td>08-23</td><td>38</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-24</td><td>14</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-25</td><td>26</td><td>2</td><td class="rate-lo">7.7%</td></tr><tr><td>08-26</td><td>15</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-27</td><td>18</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-28</td><td>23</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-29</td><td>45</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>08-30</td><td>27</td><td>1</td><td class="rate-lo">3.7%</td></tr><tr><td>08-31</td><td>24</td><td>0</td><td class="rate-lo">0.0%</td></tr><tr><td>09-01</td><td>27</td><td>3</td><td class="rate-lo">11.1%</td></tr><tr><td>09-02</td><td>29</td><td>12</td><td class="rate-lo">41.4%</td></tr><tr><td>合计</td><td>455</td><td>25</td><td class="rate-lo">5.5%</td></tr></tbody>
       </table>
     </div>
   </div>
   <div class="footer">
     <div>数据来源：分析数据文件夹（SNPM + 接车单汇总数据合并）</div>
-    <div style="margin-top:4px">结算台次 = SNPM 文件内全部记录，按“结算时间 + 工单号 + 车架号”去重；检测台次 = 当天结算 VIN 匹配当天 X3 接车单，检测报告数 ≠ 0，按“接车单创建时间 + 车牌号”去重；完成率 = 检测台次 ÷ 结算台次；累计检测台次(8/1起) = 累计X3检测台次（检测报告数 ≠ 0 的接车单，自8月1日起按“接车单创建时间 + 单号 + 车牌号”去重累计，不限里程）。</div>
+    <div style="margin-top:4px">结算台次 = SNPM 文件内全部记录，按“结算时间 + 工单号 + 车架号”去重；检测台次（17-30日）= 厂端“是否检测=检测”；31日起 = 当天结算 VIN 匹配当天 X3 接车单、检测报告数 ≠ 0、按“接车单创建时间 + 车牌号”去重；完成率 = 检测台次 ÷ 结算台次；累计检测台次(8/1起) = 累计X3检测台次（检测报告数 ≠ 0 的接车单，自8月1日起按“接车单创建时间 + 单号 + 车牌号”去重累计，不限里程）。</div>
   </div>
 </div>
 </body>

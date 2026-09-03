@@ -88,7 +88,7 @@ tr:hover td{background:#f7faff}
   </div>
   <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
     <div class="kpi"><div class="label">累计PM入厂工单结算台次</div><div class="value">536</div><div class="note">8/17至最新日，结算时间+工单号+车架号去重合计</div></div>
-    <div class="kpi"><div class="label">累计PM检测台次</div><div class="value">21</div><div class="note">8/17至最新日，当天结算VIN匹配当天X3接车单</div></div>
+    <div class="kpi"><div class="label">累计PM检测台次</div><div class="value">21</div><div class="note">17-30日厂端“是否检测”；31日起当天结算VIN匹配当天X3接车单</div></div>
     <div class="kpi"><div class="label">累计PM检测完成率</div><div class="value">3.9%</div><div class="note">检测台次 ÷ 结算台次</div></div>
     <div class="kpi"><div class="label">累计检测台次(8/1起)</div><div class="value">39</div><div class="note">累计X3检测台次（不限里程），含8月1日所有入厂检测</div></div>
   </div>
@@ -114,7 +114,7 @@ tr:hover td{background:#f7faff}
   </div>
   <div class="footer">
     <div>数据来源：分析数据文件夹（SNPM + 接车单汇总数据合并）</div>
-    <div style="margin-top:4px">结算台次 = SNPM 文件内全部记录，按“结算时间 + 工单号 + 车架号”去重；检测台次 = 当天结算 VIN 匹配当天 X3 接车单，检测报告数 ≠ 0，按“接车单创建时间 + 车牌号”去重；完成率 = 检测台次 ÷ 结算台次；累计检测台次(8/1起) = 累计X3检测台次（检测报告数 ≠ 0 的接车单，自8月1日起按“接车单创建时间 + 单号 + 车牌号”去重累计，不限里程）。</div>
+    <div style="margin-top:4px">结算台次 = SNPM 文件内全部记录，按“结算时间 + 工单号 + 车架号”去重；检测台次（17-30日）= 厂端“是否检测=检测”；31日起 = 当天结算 VIN 匹配当天 X3 接车单、检测报告数 ≠ 0、按“接车单创建时间 + 车牌号”去重；完成率 = 检测台次 ÷ 结算台次；累计检测台次(8/1起) = 累计X3检测台次（检测报告数 ≠ 0 的接车单，自8月1日起按“接车单创建时间 + 单号 + 车牌号”去重累计，不限里程）。</div>
   </div>
 </div>
 </body>
