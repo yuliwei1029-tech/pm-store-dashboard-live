@@ -59,6 +59,9 @@ tr:hover td{background:#f7faff}
 .btn-open{display:inline-block;background:#2563eb;color:#fff;border:0;border-radius:6px;padding:5px 12px;font-size:12px;text-decoration:none;font-family:inherit;white-space:nowrap}
 .btn-open:hover{background:#1d4ed8}
 .footer{color:var(--muted);font-size:12px;padding:16px 0 30px}
+.calc-note{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:13px;line-height:1.7}
+.calc-note b{color:var(--ink)}
+.calc-note:last-child{margin-bottom:0}
 @media (max-width:860px){
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
   .topbar .meta{text-align:left}
@@ -121,9 +124,17 @@ tr:hover td{background:#f7faff}
       </table>
     </div>
   </div>
+    <div class="panel">
+  <h2>计算口径汇总</h2>
+  <div class="sub">本页各指标采用统一口径，适用于 56 家门店看板及全国 / 大区 / 地担汇总看板。</div>
+  <div class="calc-note"><b>累计20KPM入厂工单结算台次：</b>取 SNPM X3版数据文件内全部结算记录，按“结算时间 + 工单号 + 车架号”去重；页面中的“20KPM”为厂端服务项目名称，不代表按 20,000 公里里程过滤。</div>
+  <div class="calc-note"><b>累计20KPM检测台次：</b>8/17-8/30 采用厂端“是否检测 = 检测”的记录；8/31 起采用当天结算 VIN 匹配当天 X3 接车单，取接车单文件内“检测报告数 ≠ 0”的记录；同一天内同一车牌号只计 1 台次。</div>
+  <div class="calc-note"><b>累计20KPM检测完成率：</b>检测台次 ÷ 结算台次。</div>
+  <div class="calc-note"><b>累计检测台次(8/1起)：</b>为累计 X3 检测台次，取“检测报告数 ≠ 0、不限里程、8/1 起按接车单创建时间 + 单号 + 车牌去重”的累计数，并排除“一汽丰田-智慧客户服务”。</div>
+  <div class="calc-note"><b>门店与数据范围：</b>固定 56 家门店，数据区间由 8/17 自动延伸至最新可用日期。</div>
+</div>
   <div class="footer">
     <div>数据来源：分析数据文件夹（SNPM + 接车单汇总数据合并）</div>
-    <div style="margin-top:4px">结算台次 = SNPM 文件内全部记录，按“结算时间 + 工单号 + 车架号”去重；检测台次（17-30日）= 厂端“是否检测=检测”；31日起 = 当天结算 VIN 匹配当天 X3 接车单、检测报告数 ≠ 0、按“接车单创建时间 + 车牌号”去重；完成率 = 检测台次 ÷ 结算台次；累计检测台次(8/1起) = 累计X3检测台次（检测报告数 ≠ 0 的接车单，自8月1日起按接车单去重累计，不限里程）。</div>
   </div>
 </div>
 </body>
